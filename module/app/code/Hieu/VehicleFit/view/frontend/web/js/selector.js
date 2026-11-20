@@ -13,6 +13,14 @@ define(['jquery', 'mage/translate'], function ($, $t) {
         } catch (e) { /* private mode, nothing to do */ }
     }
 
+    function load() {
+        try {
+            return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || 'null');
+        } catch (e) {
+            return null;
+        }
+    }
+
     function forget() {
         try {
             window.localStorage.removeItem(STORAGE_KEY);
@@ -41,7 +49,24 @@ define(['jquery', 'mage/translate'], function ($, $t) {
             $select.prop('disabled', true).empty().append(new Option(placeholder, ''));
         }
 
-        fill($make, $t('Make'), {});
+        var saved = load(),
+            current = config.selectedVehicleId && saved && saved.id === parseInt(config.selectedVehicleId, 10) &&
+                saved.make && saved.model ? saved : null;
+
+        // page opened with ?vehicle=ID that the customer picked before: show that car in the dropdowns
+        fill($make, $t('Make'), {}).done(function () {
+            if (!current) {
+                return;
+            }
+            $make.val(current.make);
+            fill($model, $t('Model'), {make: current.make}).done(function () {
+                $model.val(current.model);
+                fill($vehicle, $t('Year / engine'), {make: current.make, model: current.model}).done(function () {
+                    $vehicle.val(String(current.id));
+                    $submit.prop('disabled', !$vehicle.val());
+                });
+            });
+        });
 
         $make.on('change', function () {
             reset($vehicle, $t('Year / engine'));
@@ -75,6 +100,8 @@ define(['jquery', 'mage/translate'], function ($, $t) {
             }
             save({
                 id: parseInt($vehicle.val(), 10),
+                make: $make.val(),
+                model: $model.val(),
                 label: [$make.val(), $model.val(), $vehicle.find('option:selected').text()].join(' ')
             });
             url.searchParams.set('vehicle', $vehicle.val());
