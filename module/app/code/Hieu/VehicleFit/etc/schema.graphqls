@@ -1,0 +1,17 @@
+type Query {
+    vehicleFitment(
+        make: String! @doc(description: "Vehicle make, eg. Toyota")
+        model: String! @doc(description: "Vehicle model, eg. Corolla")
+        year: Int! @doc(description: "Model year, eg. 2019")
+    ): [VehicleFitment] @resolver(class: "Hieu\\VehicleFit\\Model\\Resolver\\Fitment") @doc(description: "Vehicles that match make, model and year, with the product IDs that fit them") @cache(cacheIdentity: "Hieu\\VehicleFit\\Model\\Resolver\\FitmentIdentity")
+}
+
+type VehicleFitment @doc(description: "One vehicle and the products that fit it") {
+    vehicle_id: Int
+    make: String
+    model: String
+    year_from: Int
+    year_to: Int
+    engine: String
+    product_ids: [Int]
+}

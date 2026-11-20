@@ -1,0 +1,17 @@
+{
+    "name": "hieu/module-vehicle-fit",
+    "description": "Vehicle fitment filter for Magento 2.4 auto parts stores (demo module)",
+    "type": "magento2-module",
+    "license": "MIT",
+    "version": "1.0.0",
+    "require": {
+        "php": "~8.2.0||~8.3.0",
+        "magento/framework": "103.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-graph-ql": "100.4.*"
+    },
+    "autoload": {
+        "files": ["registration.php"],
+        "psr-4": { "Hieu\\VehicleFit\\": "" }
+    }
+}

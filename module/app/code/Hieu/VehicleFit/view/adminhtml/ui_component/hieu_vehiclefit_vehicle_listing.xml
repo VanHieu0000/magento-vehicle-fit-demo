@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">hieu_vehiclefit_vehicle_listing.hieu_vehiclefit_vehicle_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="import">
+                <url path="*/import/index"/>
+                <class>primary</class>
+                <label translate="true">Import CSV</label>
+            </button>
+        </buttons>
+        <spinner>hieu_vehiclefit_vehicle_columns</spinner>
+        <deps>
+            <dep>hieu_vehiclefit_vehicle_listing.hieu_vehiclefit_vehicle_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="hieu_vehiclefit_vehicle_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">vehicle_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Hieu_VehicleFit::vehicles</aclResource>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider"
+                      name="hieu_vehiclefit_vehicle_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>vehicle_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="hieu_vehiclefit_vehicle_columns">
+        <column name="vehicle_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+        <column name="make" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Make</label>
+            </settings>
+        </column>
+        <column name="model" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Model</label>
+            </settings>
+        </column>
+        <column name="year_from" sortOrder="40">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Year from</label>
+            </settings>
+        </column>
+        <column name="year_to" sortOrder="50">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Year to</label>
+            </settings>
+        </column>
+        <column name="engine" sortOrder="60">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Engine</label>
+            </settings>
+        </column>
+    </columns>
+</listing>

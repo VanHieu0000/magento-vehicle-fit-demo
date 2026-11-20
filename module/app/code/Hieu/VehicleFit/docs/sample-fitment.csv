@@ -1,0 +1,10 @@
+make,model,year_from,year_to,engine,sku
+Toyota,Corolla,2018,2022,1.8 Hybrid,BRK-DSC-280
+Toyota,Corolla,2018,2022,1.8 Hybrid,BRK-PAD-280
+Toyota,Corolla,2018,2022,1.8 Hybrid,FLT-OIL-04
+Toyota,Hilux,2016,2023,2.8 D-4D,BRK-DSC-319
+Toyota,Hilux,2016,2023,2.8 D-4D,FLT-AIR-HLX
+Nissan,Patrol,2010,2019,5.6 V8,BRK-DSC-355
+Nissan,Patrol,2010,2019,5.6 V8,PLG-IRD-6
+Hyundai,Tucson,2021,2024,2.0,BRK-PAD-305
+Hyundai,Tucson,2021,2024,2.0,HUB-ASM-T21

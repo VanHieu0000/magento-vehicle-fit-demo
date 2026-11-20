@@ -1,0 +1,12 @@
+{
+    "hieu_vehiclefit_vehicle": {
+        "column": {"vehicle_id": true, "make": true, "model": true, "year_from": true, "year_to": true, "engine": true},
+        "index": {"HIEU_VEHICLEFIT_VEHICLE_MAKE_MODEL": true},
+        "constraint": {"PRIMARY": true, "HIEU_VEHICLEFIT_VEHICLE_UNIQUE": true}
+    },
+    "hieu_vehiclefit_product": {
+        "column": {"vehicle_id": true, "product_id": true},
+        "index": {"HIEU_VEHICLEFIT_PRODUCT_PRODUCT_ID_IDX": true},
+        "constraint": {"PRIMARY": true, "HIEU_VEHICLEFIT_PRODUCT_VEHICLE_ID": true, "HIEU_VEHICLEFIT_PRODUCT_PRODUCT_ID": true}
+    }
+}

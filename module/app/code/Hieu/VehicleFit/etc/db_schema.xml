@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="hieu_vehiclefit_vehicle" resource="default" engine="innodb" comment="VehicleFit vehicles">
+        <column xsi:type="int" name="vehicle_id" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="make" length="64" nullable="false"/>
+        <column xsi:type="varchar" name="model" length="64" nullable="false"/>
+        <column xsi:type="smallint" name="year_from" unsigned="true" nullable="false"/>
+        <column xsi:type="smallint" name="year_to" unsigned="true" nullable="false"/>
+        <column xsi:type="varchar" name="engine" length="64" nullable="false" default=""/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="vehicle_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="HIEU_VEHICLEFIT_VEHICLE_UNIQUE">
+            <column name="make"/>
+            <column name="model"/>
+            <column name="year_from"/>
+            <column name="year_to"/>
+            <column name="engine"/>
+        </constraint>
+        <index referenceId="HIEU_VEHICLEFIT_VEHICLE_MAKE_MODEL" indexType="btree">
+            <column name="make"/>
+            <column name="model"/>
+        </index>
+    </table>
+
+    <table name="hieu_vehiclefit_product" resource="default" engine="innodb" comment="VehicleFit vehicle to product links">
+        <column xsi:type="int" name="vehicle_id" unsigned="true" nullable="false"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="vehicle_id"/>
+            <column name="product_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="HIEU_VEHICLEFIT_PRODUCT_VEHICLE_ID"
+                    table="hieu_vehiclefit_product" column="vehicle_id"
+                    referenceTable="hieu_vehiclefit_vehicle" referenceColumn="vehicle_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="HIEU_VEHICLEFIT_PRODUCT_PRODUCT_ID"
+                    table="hieu_vehiclefit_product" column="product_id"
+                    referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="HIEU_VEHICLEFIT_PRODUCT_PRODUCT_ID_IDX" indexType="btree">
+            <column name="product_id"/>
+        </index>
+    </table>
+</schema>

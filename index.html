@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VehicleFit - Magento 2 fitment module</title>
+<meta name="description" content="VehicleFit: a Magento 2.4 module that shows customers only the auto parts that fit their vehicle. Cache-first, admin grid, CSV import, GraphQL. Demo module.">
+<meta name="theme-color" content="#0E0F11">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav">
+  <a class="brand" href="#top" aria-label="VehicleFit home"><span class="brand__dot"></span>VEHICLEFIT</a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#demo">Demo</a><a href="#flow">How</a><a href="#admin">Admin</a><a href="#code">Code</a><a href="#cache">Cache</a><a href="#ai">AI</a>
+  </nav>
+  <span class="nav__tag">Magento 2.4 &middot; demo module</span>
+</header>
+
+<main id="top">
+
+<!-- 1. HERO: the part that is still in pieces -->
+<section class="hero" id="hero">
+  <canvas id="brake3d" class="hero__canvas" aria-label="3D brake assembly that assembles when a vehicle is chosen"></canvas>
+  <div class="hero__fit" id="fitStamp" aria-hidden="true"><span>FITS</span></div>
+  <div class="hero__inner">
+    <p class="eyebrow"><span class="tick"></span>Magento 2.4 module &middot; auto parts</p>
+    <h1 class="hero__title"><span class="line"><span>Every part has</span></span><span class="line"><span>one <em>right</em> place.</span></span></h1>
+    <p class="hero__sub">VehicleFit shows customers only the parts that fit their car. Built cache-first, so your CDN and full page cache keep working.</p>
+
+    <form class="picker" id="heroPicker" aria-label="Choose your vehicle">
+      <label><span>Make</span><select name="make"></select></label>
+      <label><span>Model</span><select name="model" disabled></select></label>
+      <label><span>Year / engine</span><select name="vehicle" disabled></select></label>
+    </form>
+    <p class="hero__status" id="heroStatus" aria-live="polite">Pick a vehicle and watch the parts lock in.</p>
+  </div>
+  <a class="scroll-cue" href="#problem" aria-label="Scroll"><span></span></a>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="ticker__track">
+  <span>MAKE</span><i></i><span>MODEL</span><i></i><span>YEAR</span><i></i><span>ENGINE</span><i></i><span>ONLY PARTS THAT FIT</span><i></i>
+  <span>MAKE</span><i></i><span>MODEL</span><i></i><span>YEAR</span><i></i><span>ENGINE</span><i></i><span>ONLY PARTS THAT FIT</span><i></i>
+</div></div>
+
+<!-- 2. PROBLEM: the wrong fit -->
+<section class="problem" id="problem">
+  <figure class="problem__media reveal-clip">
+    <img src="assets/media/brake.jpg" alt="Worn, rusty brake disc and caliper on a car" loading="lazy" width="1280" height="853">
+    <figcaption class="problem__inset"><img src="assets/media/hub.jpg" alt="New wheel hub assembly with studs" loading="lazy" width="1280" height="1108"><span>the right one</span></figcaption>
+  </figure>
+  <div class="problem__text">
+    <p class="eyebrow">Chapter 01 &middot; the wrong fit</p>
+    <h2 class="h2 split">A wrong part is the most expensive sale.</h2>
+    <ul class="costs">
+      <li><b>01</b><span>Shipped twice, paid once.</span></li>
+      <li><b>02</b><span>Car stays off the road another week.</span></li>
+      <li><b>03</b><span>One wrong box, and the customer buys somewhere else next time.</span></li>
+    </ul>
+    <p class="muted">Search and category pages don't know what car the customer drives. VehicleFit adds that one missing filter.</p>
+  </div>
+</section>
+
+<!-- 3. LIVE DEMO -->
+<section class="demo" id="demo">
+  <div class="section-head">
+    <p class="eyebrow">Chapter 02 &middot; try it like a customer</p>
+    <h2 class="h2 split">Pick a car. The shelf sorts itself.</h2>
+  </div>
+
+  <div class="store">
+    <div class="store__bar">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="store__url" id="storeUrl">yourstore.com/brakes-filters.html</span>
+      <span class="store__cache" id="storeCache" title="Simulated header">X-Magento-Cache: <b>MISS</b></span>
+    </div>
+    <div class="store__body">
+      <aside class="store__side">
+        <form class="picker picker--stack" id="storePicker" aria-label="Choose your vehicle (store demo)">
+          <p class="picker__title">Choose your vehicle</p>
+          <label><span>Make</span><select name="make"></select></label>
+          <label><span>Model</span><select name="model" disabled></select></label>
+          <label><span>Year / engine</span><select name="vehicle" disabled></select></label>
+          <button type="button" class="btn-ghost" id="storeClear">Clear vehicle</button>
+        </form>
+        <p class="store__count" id="storeCount"><b>9</b> parts</p>
+      </aside>
+      <div class="store__grid" id="storeGrid"></div>
+    </div>
+  </div>
+  <p class="note">Simulated storefront with the same sample data as <code>sample-fitment.csv</code>. Cache header is simulated to show the idea: the same vehicle URL is served from cache the second time.</p>
+</section>
+
+<!-- 4. FLOW -->
+<section class="flow" id="flow">
+  <div class="section-head">
+    <p class="eyebrow">Chapter 03 &middot; how it fits together</p>
+    <h2 class="h2 split">Four parts. Zero session cookies.</h2>
+  </div>
+  <div class="flow__rail">
+    <div class="flow__track" aria-hidden="true"><div class="flow__line"></div></div>
+    <article class="step"><span class="step__n">1</span><h3>Pick</h3><p>Ajax dropdowns: make, model, year / engine. Answers are the same for every visitor, so even they cache at the edge.</p><code>vehiclefit/ajax/options</code></article>
+    <article class="step"><span class="step__n">2</span><h3>URL</h3><p>Choice goes into the URL, not the session. Each vehicle page is a normal cacheable page.</p><code>?vehicle=12</code></article>
+    <article class="step"><span class="step__n">3</span><h3>Filter</h3><p>A plugin on the catalog layer keeps only linked products. Indexed table + tagged app cache.</p><code>LayerFilterPlugin</code></article>
+    <article class="step"><span class="step__n">4</span><h3>Purge</h3><p>CSV import cleans one cache tag. Varnish / Fastly purge only fitment pages, not the whole store.</p><code>clean_cache_by_tags</code></article>
+  </div>
+</section>
+
+<!-- 5. ADMIN -->
+<section class="admin" id="admin">
+  <div class="section-head">
+    <p class="eyebrow">Chapter 04 &middot; for the store team</p>
+    <h2 class="h2 split">Managed in admin. Fed by CSV.</h2>
+    <p class="muted">Catalog &gt; Vehicle Fitment. Import from admin or from cron with <code>bin/magento vehiclefit:import</code>. Re-running a file is safe, bad lines are reported, nothing half-saved.</p>
+  </div>
+  <div class="admin__wrap">
+    <div class="mock mock--grid">
+      <div class="mock__top"><b>Vehicle Fitment</b><span class="mock__btn">Import CSV</span></div>
+      <div class="mock__filters"><span>Filters</span><span>Columns</span><span class="mock__pager">1 - 4 of 4</span></div>
+      <table class="mock__table">
+        <thead><tr><th>ID</th><th>Make</th><th>Model</th><th>Year from</th><th>Year to</th><th>Engine</th></tr></thead>
+        <tbody id="adminRows"></tbody>
+      </table>
+    </div>
+    <div class="mock mock--import">
+      <div class="mock__top"><b>Import Fitment CSV</b></div>
+      <div class="mock__file"><span class="mock__fileicon"></span>sample-fitment.csv<em>9 rows</em></div>
+      <div class="mock__msg" id="importMsg"><span class="ok"></span><span class="typed" data-text="Imported 9 rows: 4 vehicles, 9 links. 0 rows skipped. Fitment cache cleaned."></span></div>
+      <pre class="mock__cli"><span class="c-mute">$</span> bin/magento vehiclefit:import var/import/fitment.csv
+<span class="c-ok">9 rows, 4 vehicles, 9 links, 0 skipped. Cache cleaned.</span></pre>
+    </div>
+  </div>
+  <p class="note">Admin screens above are an HTML mock-up of the module&apos;s grid and import page, using the sample data.</p>
+</section>
+
+<!-- 6. CODE -->
+<section class="code" id="code">
+  <div class="section-head">
+    <p class="eyebrow">Chapter 05 &middot; the real code</p>
+    <h2 class="h2 split">Read the parts, not the brochure.</h2>
+    <p class="muted">Loaded live from the module folder in this repo.</p>
+  </div>
+  <div class="tabs" role="tablist" id="codeTabs">
+    <button role="tab" aria-selected="true" data-file="module/app/code/Hieu/VehicleFit/Plugin/Catalog/LayerFilterPlugin.php" data-lang="php">LayerFilterPlugin.php</button>
+    <button role="tab" aria-selected="false" data-file="module/app/code/Hieu/VehicleFit/Model/FitmentResolver.php" data-lang="php">FitmentResolver.php</button>
+    <button role="tab" aria-selected="false" data-file="module/app/code/Hieu/VehicleFit/Model/CacheInvalidator.php" data-lang="php">CacheInvalidator.php</button>
+    <button role="tab" aria-selected="false" data-file="module/app/code/Hieu/VehicleFit/etc/db_schema.xml" data-lang="markup">db_schema.xml</button>
+    <button role="tab" aria-selected="false" data-file="module/app/code/Hieu/VehicleFit/Model/CsvImporter.php" data-lang="php">CsvImporter.php</button>
+    <button role="tab" aria-selected="false" data-file="module/app/code/Hieu/VehicleFit/view/frontend/web/js/selector.js" data-lang="javascript">selector.js</button>
+  </div>
+  <div class="codebox">
+    <div class="codebox__head"><span id="codePath">Plugin/Catalog/LayerFilterPlugin.php</span><a id="codeRaw" href="#" target="_blank" rel="noopener">raw</a></div>
+    <pre class="codebox__pre"><code id="codeView" class="language-php">Loading...</code></pre>
+  </div>
+  <div class="tree">
+<pre>app/code/Hieu/VehicleFit
+├─ Api/                FitmentResolverInterface, Data/VehicleInterface
+├─ Block/              Selector (IdentityInterface)
+├─ Console/Command/    ImportCommand
+├─ Controller/         Ajax/Options, Ajax/Fits, Adminhtml/Vehicle, Adminhtml/Import
+├─ Model/              FitmentResolver, CacheInvalidator, CsvImporter, CsvRowValidator, Resolver/ (GraphQL)
+├─ Plugin/Catalog/     LayerFilterPlugin
+├─ Test/Unit/          CsvRowValidatorTest, FitmentResolverTest
+├─ etc/                db_schema, di, acl, menu, system, schema.graphqls
+└─ view/               selector + badge (frontend), grid + import (adminhtml)</pre>
+  </div>
+</section>
+
+<!-- 7. CACHE -->
+<section class="cache" id="cache">
+  <div class="cache__bg" aria-hidden="true"><img src="assets/media/hood.jpg" alt="" loading="lazy"></div>
+  <div class="cache__inner">
+    <div class="section-head">
+      <p class="eyebrow">Chapter 06 &middot; speed</p>
+      <h2 class="h2 split">Fast because it stays out of the way.</h2>
+    </div>
+    <div class="cache__grid">
+      <article class="card"><h3>No session for guests</h3><p>Picking a car never starts a PHP session, so the page has no Set-Cookie and the CDN can keep it.</p></article>
+      <article class="card"><h3>No <code>cacheable="false"</code></h3><p>Not one block disables full page cache. Personal bits (badge) load by ajax after the page.</p></article>
+      <article class="card"><h3>Purge by tag</h3><p>Pages carry the <code>hieu_vehiclefit</code> tag. One import purges them, nothing else.</p></article>
+    </div>
+    <div class="term" id="term" aria-label="Example curl output">
+      <div class="term__head"><i></i><i></i><i></i><span>example output</span></div>
+<pre><code><span class="c-mute">$</span> curl -sI "https://yourstore.com/brakes.html?vehicle=12" | grep -iE "cache|age|set-cookie"
+<span class="t" data-step="1">X-Magento-Cache-Debug: <b class="c-warn">MISS</b></span>
+<span class="t" data-step="1">Age: 0</span>
+<span class="c-mute t" data-step="2">$ # same request again</span>
+<span class="t" data-step="3">X-Magento-Cache-Debug: <b class="c-ok">HIT</b></span>
+<span class="t" data-step="3">Age: 42</span>
+<span class="c-mute t" data-step="3"># no Set-Cookie header on either response</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- 8. AI -->
+<section class="ai" id="ai">
+  <div class="ai__media reveal-clip"><img src="assets/media/floor.jpg" alt="Wrenches and worn car parts laid out on a workshop floor" loading="lazy" width="1280" height="854"></div>
+  <div class="ai__text">
+    <p class="eyebrow">Chapter 07 &middot; AI in the workflow</p>
+    <h2 class="h2 split">AI drafts. I measure, correct, test.</h2>
+    <p class="muted">Claude and ChatGPT for reading code, drafting, review and docs. No credentials or customer data go in. Every change below came from reviewing a first draft.</p>
+  </div>
+  <ol class="fixes" id="fixes">
+    <li><span class="fixes__n">01</span><div><s>Vehicle kept in customer session</s><b>Vehicle in URL + localStorage</b><em>session = Set-Cookie = CDN miss</em></div></li>
+    <li><span class="fixes__n">02</span><div><s>"Fits" text inside product HTML</s><b>Same HTML for all, badge by ajax</b><em>per-visitor HTML can't be cached</em></div></li>
+    <li><span class="fixes__n">03</span><div><s><code>addIdFilter($ids)</code></s><b><code>addIdFilter($ids ?: [0])</code></b><em>empty array = no filter = every part shown</em></div></li>
+    <li><span class="fixes__n">04</span><div><s>Admin grid with fulltext search</s><b>Column filters only</b><em>table has no fulltext index, grid would error</em></div></li>
+    <li><span class="fixes__n">05</span><div><s>Clean app cache after import</s><b><code>clean_cache_by_tags</code> + block identities</b><em>Varnish / CDN pages would stay old</em></div></li>
+    <li><span class="fixes__n">06</span><div><s>One SKU query per CSV row</s><b>One batch lookup, inserts in chunks of 1000</b><em>10k rows = 10k queries</em></div></li>
+  </ol>
+</section>
+
+<!-- 9. FILM BAND -->
+<section class="film" aria-label="Workshop video">
+  <video class="film__video" src="assets/media/workshop.mp4" poster="assets/media/workshop-poster.jpg" muted loop playsinline preload="none"></video>
+  <div class="film__shade"></div>
+  <div class="film__words">
+    <span>Measured.</span><span>Fitted.</span><span>Tested.</span>
+  </div>
+</section>
+
+<!-- 10. HANDOVER -->
+<section class="handover" id="handover">
+  <div class="section-head">
+    <p class="eyebrow">Chapter 08 &middot; handover</p>
+    <h2 class="h2 split">Installed in five commands. Documented for the next person.</h2>
+  </div>
+  <div class="handover__grid">
+<pre class="install"><code><span class="c-mute"># copy to app/code/Hieu/VehicleFit, then</span>
+bin/magento module:enable Hieu_VehicleFit
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/magento cache:flush
+bin/magento vehiclefit:import var/import/fitment.csv</code></pre>
+    <ul class="checks">
+      <li>README with install, config, GraphQL, known limits</li>
+      <li>AI workflow notes: what changed after review and why</li>
+      <li>Unit tests for validator and cache logic</li>
+      <li>ACL: separate rights for grid and import</li>
+      <li>Known limit stated: layered nav counts need OpenSearch indexing</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 11. END -->
+<section class="end">
+  <div class="end__bg" aria-hidden="true"><img src="assets/media/headlight.jpg" alt="" loading="lazy"></div>
+  <div class="end__inner">
+    <p class="eyebrow">The right part, first time</p>
+    <h2 class="end__title split">Questions about the code? Ask me in Freelancer chat.</h2>
+    <a class="btn" href="#code">Read the code</a>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <p><b>VehicleFit</b> is a demo module built to show Magento 2 skills. Sample data only, no client code or data.</p>
+  <details>
+    <summary>Media credits</summary>
+    <ul>
+      <li>Rusty brake disc and caliper, Shixart1985, CC BY 2.0, Wikimedia Commons</li>
+      <li>Mechanic tools and worn vehicle parts, Shixart1985, CC BY 2.0, Wikimedia Commons</li>
+      <li>Under the hood of car, Envy fstop, CC BY-SA 4.0, Wikimedia Commons</li>
+      <li>Wheel hub assembly, Cschirp, CC BY 3.0, Wikimedia Commons</li>
+      <li>Headlight, Bernard Spragg. NZ, CC0, Wikimedia Commons</li>
+      <li>Man repairing a car (video), Pexels, Pexels License</li>
+      <li>3D brake assembly: built in code with three.js</li>
+    </ul>
+  </details>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" data-manual></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup-templating.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+<script type="module" src="assets/js/site.js"></script>
+</body>
+</html>

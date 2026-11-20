@@ -1,0 +1,18 @@
+<?php
+/** @var \Magento\Backend\Block\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<form action="<?= $escaper->escapeUrl($block->getUrl('*/*/save')) ?>" method="post" enctype="multipart/form-data">
+    <input name="form_key" type="hidden" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>"/>
+    <fieldset class="admin__fieldset">
+        <legend class="admin__legend"><span><?= $escaper->escapeHtml(__('Fitment CSV')) ?></span></legend>
+        <p><?= $escaper->escapeHtml(__('Columns: make, model, year_from, year_to, engine (optional), sku. Re-running the same file is safe.')) ?></p>
+        <div class="admin__field">
+            <label class="admin__field-label" for="fitment_csv"><span><?= $escaper->escapeHtml(__('File')) ?></span></label>
+            <div class="admin__field-control">
+                <input type="file" id="fitment_csv" name="fitment_csv" accept=".csv" required/>
+            </div>
+        </div>
+        <button type="submit" class="action-primary"><span><?= $escaper->escapeHtml(__('Import')) ?></span></button>
+    </fieldset>
+</form>

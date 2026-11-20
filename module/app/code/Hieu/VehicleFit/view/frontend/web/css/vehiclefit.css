@@ -1,0 +1,9 @@
+.vehiclefit-selector { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 16px; margin: 0 0 20px; border: 1px solid #e3e3e3; border-radius: 6px; background: #fafafa; }
+.vehiclefit-selector__title { font-weight: 600; margin-right: 6px; }
+.vehiclefit-selector label { flex: 1 1 160px; margin: 0; }
+.vehiclefit-selector select { width: 100%; }
+.vehiclefit-selector .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.vehiclefit-badge { display: inline-block; margin: 10px 0 16px; padding: 8px 14px; border-radius: 4px; font-weight: 600; }
+.vehiclefit-badge.is-fit { background: #e7f6ec; color: #1b6e34; }
+.vehiclefit-badge.is-not-fit { background: #fdecea; color: #a12a1f; }
+@media (max-width: 767px) { .vehiclefit-selector label, .vehiclefit-selector button { flex: 1 1 100%; } }

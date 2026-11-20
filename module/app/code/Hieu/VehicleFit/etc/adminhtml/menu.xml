@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Hieu_VehicleFit::vehicles" title="Vehicle Fitment" translate="title" module="Hieu_VehicleFit"
+             sortOrder="50" parent="Magento_Catalog::catalog" action="vehiclefit/vehicle/index"
+             resource="Hieu_VehicleFit::vehicles"/>
+        <add id="Hieu_VehicleFit::import" title="Import Fitment CSV" translate="title" module="Hieu_VehicleFit"
+             sortOrder="60" parent="Magento_Catalog::catalog" action="vehiclefit/import/index"
+             resource="Hieu_VehicleFit::import"/>
+    </menu>
+</config>

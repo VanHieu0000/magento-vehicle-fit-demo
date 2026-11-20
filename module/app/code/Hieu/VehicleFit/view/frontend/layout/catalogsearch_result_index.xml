@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Hieu_VehicleFit::css/vehiclefit.css"/>
+    </head>
+    <body>
+        <!-- No cacheable="false" here on purpose: the page stays in full page cache. -->
+        <referenceContainer name="content.top">
+            <block class="Hieu\VehicleFit\Block\Selector" name="vehiclefit.selector"
+                   template="Hieu_VehicleFit::selector.phtml" before="-"/>
+        </referenceContainer>
+    </body>
+</page>

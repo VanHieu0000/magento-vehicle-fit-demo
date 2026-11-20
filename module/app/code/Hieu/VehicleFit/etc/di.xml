@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Hieu\VehicleFit\Api\FitmentResolverInterface" type="Hieu\VehicleFit\Model\FitmentResolver"/>
+
+    <!-- Admin grid collection -->
+    <virtualType name="Hieu\VehicleFit\Model\ResourceModel\Vehicle\Grid\Collection"
+                 type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">hieu_vehiclefit_vehicle</argument>
+            <argument name="resourceModel" xsi:type="string">Hieu\VehicleFit\Model\ResourceModel\Vehicle</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="hieu_vehiclefit_vehicle_listing_data_source" xsi:type="string">Hieu\VehicleFit\Model\ResourceModel\Vehicle\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- CLI: bin/magento vehiclefit:import var/import/fitment.csv -->
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="vehiclefit_import" xsi:type="object">Hieu\VehicleFit\Console\Command\ImportCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Proxy: bin/magento should not build the importer (and its DB deps) just to list commands -->
+    <type name="Hieu\VehicleFit\Console\Command\ImportCommand">
+        <arguments>
+            <argument name="importer" xsi:type="object">Hieu\VehicleFit\Model\CsvImporter\Proxy</argument>
+        </arguments>
+    </type>
+</config>

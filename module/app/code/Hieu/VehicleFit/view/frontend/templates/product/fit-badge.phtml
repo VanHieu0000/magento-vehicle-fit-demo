@@ -1,0 +1,17 @@
+<?php
+/** @var \Magento\Catalog\Block\Product\View $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$product = $block->getProduct();
+if (!$product) {
+    return;
+}
+$config = [
+    'Hieu_VehicleFit/js/fit-badge' => [
+        'fitsUrl' => $block->getUrl('vehiclefit/ajax/fits'),
+        'productId' => (int)$product->getId(),
+    ],
+];
+?>
+<!-- Same HTML for every visitor; the result is filled in the browser so FPC is not affected. -->
+<div class="vehiclefit-badge" hidden aria-live="polite"
+     data-mage-init='<?= $escaper->escapeHtmlAttr(json_encode($config)) ?>'></div>

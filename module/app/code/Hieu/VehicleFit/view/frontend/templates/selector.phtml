@@ -1,0 +1,35 @@
+<?php
+/** @var \Hieu\VehicleFit\Block\Selector $block */
+/** @var \Magento\Framework\Escaper $escaper */
+if (!$block->isEnabled()) {
+    return;
+}
+?>
+<form class="vehiclefit-selector" action="#" method="get"
+      data-mage-init='<?= $escaper->escapeHtmlAttr($block->getJsConfig()) ?>'>
+    <span class="vehiclefit-selector__title"><?= $escaper->escapeHtml(__('Choose your vehicle')) ?></span>
+    <label>
+        <span class="sr-only"><?= $escaper->escapeHtml(__('Make')) ?></span>
+        <select name="make" disabled>
+            <option value=""><?= $escaper->escapeHtml(__('Make')) ?></option>
+        </select>
+    </label>
+    <label>
+        <span class="sr-only"><?= $escaper->escapeHtml(__('Model')) ?></span>
+        <select name="model" disabled>
+            <option value=""><?= $escaper->escapeHtml(__('Model')) ?></option>
+        </select>
+    </label>
+    <label>
+        <span class="sr-only"><?= $escaper->escapeHtml(__('Year / engine')) ?></span>
+        <select name="vehicle" disabled>
+            <option value=""><?= $escaper->escapeHtml(__('Year / engine')) ?></option>
+        </select>
+    </label>
+    <button type="submit" class="action primary" disabled>
+        <span><?= $escaper->escapeHtml(__('Show parts that fit')) ?></span>
+    </button>
+    <button type="button" class="action vehiclefit-clear" hidden>
+        <span><?= $escaper->escapeHtml(__('Clear vehicle')) ?></span>
+    </button>
+</form>
