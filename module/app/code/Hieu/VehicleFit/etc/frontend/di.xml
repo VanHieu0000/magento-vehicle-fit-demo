@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <!-- Filter category product list by ?vehicle=ID. URL based, no session, so FPC/Varnish/CDN keep working. -->
-    <type name="Magento\Catalog\Model\Layer">
-        <plugin name="hieu_vehiclefit_layer_filter" type="Hieu\VehicleFit\Plugin\Catalog\LayerFilterPlugin" sortOrder="100"/>
+    <!-- Filter category + search product lists by ?vehicle=ID inside the search engine query.
+         URL based, no session, so FPC/Varnish/CDN keep working. Works for OpenSearch and Elasticsearch. -->
+    <type name="Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Mapper">
+        <plugin name="hieu_vehiclefit_search_filter" type="Hieu\VehicleFit\Plugin\Search\VehicleSearchFilterPlugin" sortOrder="100"/>
     </type>
 </config>

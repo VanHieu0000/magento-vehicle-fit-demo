@@ -19,7 +19,7 @@ Built cache-first: no session, no `cacheable="false"`, purge by cache tag, so fu
 ## Module features
 
 - Two indexed tables with foreign keys (declarative schema)
-- Storefront selector (ajax) + `?vehicle=ID` filter on category and search pages (plugin on catalog layer)
+- Storefront selector (ajax) + `?vehicle=ID` filter on category and search pages (ids filter inside the OpenSearch query)
 - Product page badge "Fits your ..." loaded by ajax, page HTML stays cacheable
 - Admin grid (UI component) + CSV import in admin and CLI (`bin/magento vehiclefit:import`)
 - Tagged app cache + FPC purge by tag after import
@@ -43,6 +43,8 @@ Installed and checked on Magento Open Source 2.4.7-p10, PHP 8.2, MariaDB 10.6, O
 - `setup:upgrade` creates both tables, `module:status` = enabled
 - CLI import of the sample CSV: 9 rows, 4 vehicles, 9 links, 0 skipped
 - admin grid lists the vehicles; ajax options and fit check return correct results with public cache headers
+- bigger sample: 411 parts, 37 vehicles, 485 fitment links imported, 0 skipped
+- storefront `?vehicle=` filter: Brakes 124 items -> 4 for Land Cruiser 2022-2026 (bug found and fixed in this check, see module docs)
 
 Unit tests are included but were not run in that install (dev packages not installed).
 

@@ -8,7 +8,7 @@ Built cache-first: no session, no cookies, so full page cache / Varnish / CDN ke
 | Area | What it does | Files |
 |---|---|---|
 | Data | 2 tables, indexed, FK to products with cascade delete | `etc/db_schema.xml` |
-| Storefront filter | `?vehicle=ID` on category + search pages | `Plugin/Catalog/LayerFilterPlugin.php`, `etc/frontend/di.xml` |
+| Storefront filter | `?vehicle=ID` on category + search pages, as an `ids` filter inside the OpenSearch/Elasticsearch query (correct paging, totals, layered nav counts) | `Plugin/Search/VehicleSearchFilterPlugin.php`, `etc/frontend/di.xml` |
 | Selector | 3 dropdowns, ajax, remembers choice in localStorage | `Block/Selector.php`, `view/frontend/templates/selector.phtml`, `view/frontend/web/js/selector.js` |
 | Product badge | "Fits your 2019 Toyota Corolla" | `view/frontend/templates/product/fit-badge.phtml`, `view/frontend/web/js/fit-badge.js`, `Controller/Ajax/Fits.php` |
 | Admin grid | Catalog > Vehicle Fitment | `view/adminhtml/ui_component/hieu_vehiclefit_vehicle_listing.xml` |
@@ -57,7 +57,13 @@ query {
 
 ## Known limits / next steps
 
-1. Layered navigation counts come from OpenSearch aggregations, so they show unfiltered numbers.
-   Production fix: add fitment as an indexed attribute (or a custom search request filter) so OpenSearch filters and counts.
+1. The `ids` filter is fine up to a few thousand parts per vehicle. Bigger: index fitment into the product documents (vehicle ids field) and filter on that.
 2. Very big catalogs (millions of links): move `getProductIds` to an indexer table per store and add a message-queue import.
 3. Add an integration test for `CsvImporter` against a real DB (dev/tests/integration).
+
+## Fix found in real install
+
+First version used a plugin on `Catalog\Model\Layer::prepareProductCollection`. On a real 2.4.7-p10 store
+the filter did nothing: `Layer` calls that method on `$this`, so the plugin never runs, and with OpenSearch
+the paging is done by the engine anyway. Moved the filter into the search query (`VehicleSearchFilterPlugin`).
+Checked: Brakes category 124 items -> 4 items for Toyota Land Cruiser 2022-2026.

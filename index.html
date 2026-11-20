@@ -112,7 +112,7 @@
     <div class="flow__track" aria-hidden="true"><div class="flow__line"></div></div>
     <article class="step"><span class="step__n">1</span><h3>Pick</h3><p>Ajax dropdowns: make, model, year / engine. Answers are the same for every visitor, so even they cache at the edge.</p><code>vehiclefit/ajax/options</code></article>
     <article class="step"><span class="step__n">2</span><h3>URL</h3><p>Choice goes into the URL, not the session. Each vehicle page is a normal cacheable page.</p><code>?vehicle=12</code></article>
-    <article class="step"><span class="step__n">3</span><h3>Filter</h3><p>A plugin on the catalog layer keeps only linked products. Indexed table + tagged app cache.</p><code>LayerFilterPlugin</code></article>
+    <article class="step"><span class="step__n">3</span><h3>Filter</h3><p>A plugin adds the fitting product ids to the OpenSearch query, so paging and counts stay right. Indexed table + tagged app cache.</p><code>VehicleSearchFilterPlugin</code></article>
     <article class="step"><span class="step__n">4</span><h3>Purge</h3><p>CSV import cleans one cache tag. Varnish / Fastly purge only fitment pages, not the whole store.</p><code>clean_cache_by_tags</code></article>
   </div>
 </section>
@@ -152,7 +152,7 @@
     <p class="muted">Loaded live from the module folder in this repo.</p>
   </div>
   <div class="tabs" role="tablist" id="codeTabs">
-    <button role="tab" aria-selected="true" data-file="module/app/code/Hieu/VehicleFit/Plugin/Catalog/LayerFilterPlugin.php" data-lang="php">LayerFilterPlugin.php</button>
+    <button role="tab" aria-selected="true" data-file="module/app/code/Hieu/VehicleFit/Plugin/Search/VehicleSearchFilterPlugin.php" data-lang="php">VehicleSearchFilterPlugin.php</button>
     <button role="tab" aria-selected="false" data-file="module/app/code/Hieu/VehicleFit/Model/FitmentResolver.php" data-lang="php">FitmentResolver.php</button>
     <button role="tab" aria-selected="false" data-file="module/app/code/Hieu/VehicleFit/Model/CacheInvalidator.php" data-lang="php">CacheInvalidator.php</button>
     <button role="tab" aria-selected="false" data-file="module/app/code/Hieu/VehicleFit/etc/db_schema.xml" data-lang="markup">db_schema.xml</button>
@@ -160,7 +160,7 @@
     <button role="tab" aria-selected="false" data-file="module/app/code/Hieu/VehicleFit/view/frontend/web/js/selector.js" data-lang="javascript">selector.js</button>
   </div>
   <div class="codebox">
-    <div class="codebox__head"><span id="codePath">Plugin/Catalog/LayerFilterPlugin.php</span><a id="codeRaw" href="#" target="_blank" rel="noopener">raw</a></div>
+    <div class="codebox__head"><span id="codePath">Plugin/Search/VehicleSearchFilterPlugin.php</span><a id="codeRaw" href="#" target="_blank" rel="noopener">raw</a></div>
     <pre class="codebox__pre"><code id="codeView" class="language-php">Loading...</code></pre>
   </div>
   <div class="tree">
@@ -170,7 +170,7 @@
 ├─ Console/Command/    ImportCommand
 ├─ Controller/         Ajax/Options, Ajax/Fits, Adminhtml/Vehicle, Adminhtml/Import
 ├─ Model/              FitmentResolver, CacheInvalidator, CsvImporter, CsvRowValidator, Resolver/ (GraphQL)
-├─ Plugin/Catalog/     LayerFilterPlugin
+├─ Plugin/Search/      VehicleSearchFilterPlugin
 ├─ Test/Unit/          CsvRowValidatorTest, FitmentResolverTest
 ├─ etc/                db_schema, di, acl, menu, system, schema.graphqls
 └─ view/               selector + badge (frontend), grid + import (adminhtml)</pre>
