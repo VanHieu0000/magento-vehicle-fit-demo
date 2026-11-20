@@ -39,6 +39,13 @@ bin/magento cache:flush
 
 Demo / portfolio module with sample data only. No client code or data.
 
+Installed and checked on Magento Open Source 2.4.7-p10, PHP 8.2, MariaDB 10.6, OpenSearch 2.12:
+- `setup:upgrade` creates both tables, `module:status` = enabled
+- CLI import of the sample CSV: 9 rows, 4 vehicles, 9 links, 0 skipped
+- admin grid lists the vehicles; ajax options and fit check return correct results with public cache headers
+
+Unit tests are included but were not run in that install (dev packages not installed).
+
 ## Media credits
 
 Photos from Wikimedia Commons (Shixart1985 CC BY 2.0, Envy fstop CC BY-SA 4.0, Bernard Spragg. NZ CC0, Cschirp CC BY 3.0) and a Pexels video (Pexels License). 3D brake assembly built in code with three.js.
